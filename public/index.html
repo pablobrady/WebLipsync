@@ -4,11 +4,11 @@
 <title>Anim Practice</title>
 
 <style>
-.surface {
+.canvas {
   background: rgba(0, 0, 0, 0.2) url("images/blur_riverbg.jpg") top left no-repeat;
+  position: relative;
   width: 1000px;
   height: 750px;
-  position: relative;
 }
 .aliHead {
   position: absolute;
@@ -30,30 +30,57 @@
 
 </head>
 <body>
-  <canvas id="cartoonCanvas"></canvas>
+<canvas id="cartoonCanvas" class="canvas"></canvas>
+<div class="copyright">Images © 2005-2016 Cartoon Solutions</div>
 
   <div class="surface">
-    <div class="aliBody" id="aliBody-01"><img src="images/ali_body.png" /></div>
-    <div class="aliHead" id="aliHead-01"><img src="images/ali_front_faces.png" /></div>
-    <div class="copyright">Images © 2005-2016 Cartoon Solutions</div>
+    <!-- div class="aliBody" id="aliBody-01"><img src="images/ali_body.png" /></div -->
+    <!-- div class="aliHead" id="aliHead-01"><img src="images/ali_front_faces.png" /></div -->
   </div>
   <audio id='audioPlayerId' preload="none" controls>
     <source id="mp3Source" type="audio/mpeg" src="audio/ali_intro.mp3">
-    <!-- source id="oggSource" src="http://www.oceansoundscapes.com/audio/ocean/OceanBeach-LandsEndwFogHorn.ogg" type="audio/ogg" -->
+    <!-- source id="oggSource" src=".ogg" type="audio/ogg" -->
     Your browser does not support the audio element.  Please update your browser.
   </audio>
 
 
-<script src="js/sprite.js"></script>
-<script src="js/spriteManager.js"></script>
+<!-- script src="js/sprite.js"></script -->
+<!-- script src="js/spriteManager.js"></script -->
 <script src="js/lipsyncManager.js"></script>
 <script>
 
-window.headSprite = null;
-window.spriteSheet = null;
+window.globalAppSettings = {
+  aliHead_x: 375,
+  aliHead_y: 80,
+  aliBody_x: 350,
+  aliBody_y: 100,
+  cartoonCanvasWidth: 1000,
+  cartoonCanvasHeight: 750
+};
+
+var lipsMgr = new LipSyncManager( {
+  canvasId: 'cartoonCanvas',
+  spriteSheetFilename: 'images/ali_front_faces.png',
+  fps: 12,
+  phonemes: 6,
+  headWidth: 200,
+  headHeight: 175,
+  spriteSheetWidth: 1400,
+  spriteSheetHeight: 700,
+  expressions: 0,
+  audioPlayerId: 'audioPlayerId',
+  soundFile: 'audio/ali_intro.mp3',
+  lipsyncData:  [ [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0] ],
+  headId: 'aliHead-01',
+  onReady: onReadyBeginPlayback
+} );
 
 
-//// RequestAnimationFrame for Smart Animating ////
+
+//////
+// Sprite Animation Prep 
+// RequestAnimationFrame for Smart Animating
+//////
 (function() {
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
   // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
@@ -84,40 +111,138 @@ window.spriteSheet = null;
         };
 }());
 
-
+//////////////
+// Sprite Animation Loop
+// Based on work by William Malone ( http://bit.ly/UjwpCM )
 //////////////
 
+(function () {
 
-var aliBody = document.querySelector("#aliBody-01");
-aliBody.style["transform"] = "translateX(300px) translateY(80px)";
+  var bodySprite,
+      bodyImage,
+      headSprite,
+      headImage,
+      canvas;         
 
-var aliHead = document.querySelector("#aliHead-01");
-aliHead.style["transform"] = "translateX(360px) translateY(75px)";
+  function gameLoop () {
+  
+    window.requestAnimationFrame(gameLoop);
+
+    // bodySprite.update();
+    // bodySprite.render();
+
+    headSprite.update();
+    headSprite.render();
+  }
+  
+  function sprite (options) {
+  
+    var that = {},
+      frameIndex = 0,
+      tickCount = 0,
+      ticksPerFrame = options.ticksPerFrame || 0,
+      numberOfFrames = options.numberOfFrames || 1;
+    
+    that.context = options.context;
+    that.width = options.width;
+    that.height = options.height;
+    that.image = options.image;
+    
+    that.update = function () {
+
+            tickCount += 1;
+
+            if (tickCount > ticksPerFrame) {
+
+                tickCount = 0;
+
+                // If the current frame index is in range
+                if (frameIndex < numberOfFrames - 1) {  
+                    // Go to the next frame
+                    frameIndex += 1;
+                } else {
+                    frameIndex = 0;
+                }
+            }
+        };
+    
+    that.render = function () {
+    
+      // Clear the canvas
+      that.context.clearRect(0, 0, that.width, that.height);
+      
+      // Draw the Ali Body
+      that.context.drawImage(
+        that.image,
+        frameIndex * lipsMgr.headWidth, // position on source canvas
+        lipsMgr.expressions * lipsMgr.headHeight,      // 175 * expression
+        lipsMgr.headWidth,  // that.width / numberOfFrames,
+        lipsMgr.headHeight, // that.height,
+        window.globalAppSettings.aliHead_x,   // position to draw on canvas
+        window.globalAppSettings.aliHead_y,
+        lipsMgr.headWidth,
+        lipsMgr.headHeight
+      );
+
+      // Draw the animated Ali Head/Mouth
+      that.context.drawImage(
+        that.image,
+        frameIndex * lipsMgr.headWidth, // position on source canvas
+        lipsMgr.expressions * lipsMgr.headHeight,      // 175 * expression
+        lipsMgr.headWidth,  // that.width / numberOfFrames,
+        lipsMgr.headHeight, // that.height,
+        window.globalAppSettings.aliHead_x,   // position to draw on canvas
+        window.globalAppSettings.aliHead_y,
+        lipsMgr.headWidth,
+        lipsMgr.headHeight
+      );
+    };
+    
+    return that;
+  }
+  
+  // Get entire canvas
+  canvas = document.getElementById("cartoonCanvas");
+  canvas.width = 1000;
+  canvas.height = 750;
+  
+  // Create sprite sheet
+  headImage = new Image();
+  bodyImage = new Image();
+  
+  // Create sprite
+  headSprite = sprite({
+    context: canvas.getContext("2d"),
+    width: 1400,
+    height: 700,
+    image: headImage,
+    numberOfFrames: lipsMgr.phonemes,
+    ticksPerFrame: 4
+  });
+  
+  // Load sprite sheet
+  headImage.addEventListener("load", gameLoop);
+  headImage.src = "images/ali_front_faces.png";
+
+} ());
+
+///////
+
+
+
+
+
+// var aliBody = document.querySelector("#aliBody-01");
+// aliBody.style["transform"] = "translateX(300px) translateY(80px)";
+
+// var aliHead = document.querySelector("#aliHead-01");
+// aliHead.style["transform"] = "translateX(360px) translateY(75px)";
 
 
 var onReadyBeginPlayback = function() {
   console.log( "Custom onReadyBeginPlayback!!!!" );
   this.play("#headIdStr");
 };
-
-
-
-var lipsMgr = new LipSyncManager( {
-  canvasId: 'cartoonCanvas',
-  spriteSheetFilename: 'images/ali_front_faces.png',
-  fps: 12,
-  phonemes: 6,
-  headWidth: 200,
-  headHeight: 175,
-  spriteSheetWidth: 1400,
-  spriteSheetHeight: 700,
-  expressions: 2,
-  audioPlayerId: 'audioPlayerId',
-  soundFile: 'audio/ali_intro.mp3',
-  lipsyncData:  [ [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0], [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0] ],
-  headId: 'aliHead-01',
-  onReady: onReadyBeginPlayback
-} );
 
 
 

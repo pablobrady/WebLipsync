@@ -74,26 +74,10 @@ var LipSyncManager = function( initObj ) {
 
   // !!!!! remove - var spriteManager = new SpriteManager();
 
-  this.spriteManager = new SpriteManager({
-    canvasId:  this.canvasId, 
-    spriteSheetFilename: this.spriteSheetFilename,
-    fps: this.fps,
-    phonemes: this.phonemes,
-    headWidth: this.headWidth,
-    headHeight: this.headHeight,
-    spriteSheetWidth: this.spriteSheetWidth,
-    spriteSheetHeight: this.spriteSheetHeight,
-    expressions: this.expressions,
-    headId: this.headId,
-    headElement: this.headElement,
-    ticksPerFrame: 4,
-    lipsyncData: this.lipsyncData
-  });
-
   this.loadAudio(this.soundFile);
   // this.audioPlayerElement.play();
 
-  this.onReady(); //  -- Call this after LIPS and .MP3 have loaded.
+  // this.onReady(); //  -- Call this after LIPS and .MP3 have loaded.
 };
 
 LipSyncManager.prototype.getDefaults = function() {
@@ -107,7 +91,7 @@ LipSyncManager.prototype.getDefaults = function() {
     headHeight: 175,
     spriteSheetWidth: 1400,
     spriteSheetHeight: 700,
-    expressions: 1,
+    expressions: 0,
     audioPlayerId: 'audioPlayerId',
     soundFile: 'audio/defaultAudio.mp3',
     lipsyncData:  [ [0,2], [1,2], [2,2], [3,2], [4,2], [5,2], [6,2], [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0] ],
