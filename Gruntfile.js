@@ -95,6 +95,7 @@ http-server public/
   grunt.loadNpmTasks('grunt-concurrent');
 
   grunt.registerTask('start',['nodemon']);
-  grunt.registerTask('default',['jshint','uglify','concat','htmlmin','sass']);
-  grunt.registerTask('dev',['jshint','uglify','concat','htmlmin','concurrent']);
+  // grunt.registerTask('default',['jshint','uglify','concat','htmlmin','sass']);
+  // grunt.registerTask('dev',['jshint','concurrent']);
+  // grunt.task.run('dev',['jshint','concat','copy','watch']);
 };
