@@ -1,4 +1,7 @@
 var LipSyncManager = function( initObj ) { 
+  this.currentHeadId = 0;
+  this.currentHeadIndex = 0;
+
   if (!this.initObj) { this.initObj={}; }
 
   if (initObj.hasOwnProperty('canvasId')) { this.canvasId = initObj.canvasId;  } 
@@ -111,6 +114,7 @@ LipSyncManager.prototype.loadAudio = function( anMP3AudioURL ) {
   // document.getElementById('oggSource').src = anOGGAudioURL;
 
   this.audioPlayerElement.load();
+  this.play()
   return true;
 };
 
@@ -126,15 +130,52 @@ LipSyncManager.prototype.setFrame = function( frameNum, expressionNum ) {
 
 }
 
-LipSyncManager.prototype.play = function( headIdStr ) { 
-    // One headId per soundfile.  We handle only a single headId for now.
-    console.log("LipSyncManager::play!");
+LipSyncManager.prototype.play = function() { 
+  // One headId per soundfile.  We handle only a single headId for now.
+  console.log("LipSyncManager::play!");
 
-    this.setFrame( 1, 0 ); // !!!!!
+  // Start Audio
+  this.audioPlayerElement.play(); // Play the HTML element
 
-    // setTimeout(  function() { brushTeeth.call(alice) }, 1000); 
-
-    // DISABLED!!!!! this.audioPlayerElement.play(); // Play the HTML element
-
+  // Start Head Animation
+  this.currentHeadIndex = 0;
+  this.currentHeadId = 0;
+console.log("CHKPT1: " + this.currentHeadIndex);
+  this.startTimerTick();
 };
+
+//// 
+
+LipSyncManager.prototype.startTimerTick = function () {
+  console.log("startTimerTick!");
+console.log("CHKPT2: " + this.currentHeadIndex);
+
+  if ( window.lipsyncManagerTimeout ) { clearTimeout( window.lipsyncManagerTimeout ); }
+
+  var scope = this;
+  window.lipsyncManagerTimeout = setTimeout( scope.updateTimedHeadIndex.bind(scope) , 1000); // !!!!!  / this.fps ); 
+
+console.log("startTimerTick!  -- SetTimeout!");
+};
+
+
+LipSyncManager.prototype.updateTimedHeadIndex = function() {
+console.log("updateTimedHeadIndex ARRIVAL!  this.currentHeadIndex = " + this.currentHeadIndex);
+  this.currentHeadIndex = this.currentHeadIndex + 1;
+  console.log("updateTimedHeadIndex! " + this.currentHeadIndex);
+  if( this.currentHeadIndex < 12 ) { // lipsyncDataLen
+    this.startTimerTick(); // Do another tick...
+    return;
+  }
+}
+
+//// 
+
+LipSyncManager.prototype.getCurrentHeadId = function () {
+console.log("LIP SYNC INDEX: " + this.currentHeadIndex);
+// console.log("this.lipsyncData[x][e] = " + this.lipsyncData[this.currentHeadIndex][this.expressions] );
+
+  return this.lipsyncData[this.currentHeadIndex][this.expressions];
+}
+
 
