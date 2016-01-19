@@ -1,4 +1,4 @@
-
+/*
 var SpriteManager = function( initObj ) { 
 console.log("SpriteManager ARRIVAL....", initObj);
 
@@ -11,7 +11,8 @@ console.log("SpriteManager ARRIVAL....", initObj);
   this.spriteSheet = new Image();
   
   // Create sprite
-  window.headSprite = new Sprite({
+console.log("calling sprite().")
+  headSprite = sprite({
     context: this.canvas.getContext("2d"),
     width: 1400,
     height: 700,
@@ -19,6 +20,7 @@ console.log("SpriteManager ARRIVAL....", initObj);
     numberOfFrames: 7,
     ticksPerFrame: 4
   });
+console.log("sprite() complete.")
 
   // Load sprite sheet
   this.spriteSheet.addEventListener("load", SpriteManager.prototype.gameLoop );
@@ -33,3 +35,4 @@ SpriteManager.prototype.gameLoop = function() {
     window.headSprite.render();
 };
 
+*/

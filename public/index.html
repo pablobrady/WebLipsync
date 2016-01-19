@@ -32,28 +32,28 @@
 <body>
 <canvas id="cartoonCanvas" class="canvas"></canvas>
 <div class="copyright">Images © 2005-2016 Cartoon Solutions</div>
+<audio id='audioPlayerId' preload="none" controls>
+  <source id="mp3Source" type="audio/mpeg" src="audio/ali_intro.mp3">
+  <!-- source id="oggSource" src=".ogg" type="audio/ogg" -->
+  Your browser does not support the audio element.  Please update your browser.
+</audio>
 
-  <div class="surface">
-    <!-- div class="aliBody" id="aliBody-01"><img src="images/ali_body.png" /></div -->
-    <!-- div class="aliHead" id="aliHead-01"><img src="images/ali_front_faces.png" /></div -->
-  </div>
-  <audio id='audioPlayerId' preload="none" controls>
-    <source id="mp3Source" type="audio/mpeg" src="audio/ali_intro.mp3">
-    <!-- source id="oggSource" src=".ogg" type="audio/ogg" -->
-    Your browser does not support the audio element.  Please update your browser.
-  </audio>
-
-
-<!-- script src="js/sprite.js"></script -->
-<!-- script src="js/spriteManager.js"></script -->
 <script src="js/lipsyncManager.js"></script>
 <script>
+
+window.lipsyncEnum = {};
+window.lipsyncEnum.spriteType = {
+  LIPSYNCED : 1,
+  STATIC : 2
+}
 
 window.globalAppSettings = {
   aliHead_x: 375,
   aliHead_y: 80,
-  aliBody_x: 350,
-  aliBody_y: 100,
+  aliBody_x: 300,
+  aliBody_y: 60,
+  aliBody_width: 481,
+  aliBody_height: 629,
   cartoonCanvasWidth: 1000,
   cartoonCanvasHeight: 750
 };
@@ -94,7 +94,7 @@ var lipsMgr = new LipSyncManager( {
         window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
                                    || window[vendors[x]+'CancelRequestAnimationFrame'];
     }
- 
+
     if (!window.requestAnimationFrame)
         window.requestAnimationFrame = function(callback, element) {
             var currTime = new Date().getTime();
@@ -128,10 +128,9 @@ var lipsMgr = new LipSyncManager( {
   
     window.requestAnimationFrame(gameLoop);
 
-    // bodySprite.update();
-    // bodySprite.render();
-
     headSprite.update();
+
+    bodySprite.render();
     headSprite.render();
   }
   
@@ -143,75 +142,102 @@ var lipsMgr = new LipSyncManager( {
       ticksPerFrame = options.ticksPerFrame || 0,
       numberOfFrames = options.numberOfFrames || 1;
     
+    that.spriteType = options.spriteType;
+
     that.context = options.context;
     that.width = options.width;
     that.height = options.height;
     that.image = options.image;
     
     that.update = function () {
+      if( that.spriteType != window.lipsyncEnum.spriteType.LIPSYNCED ) return;
 
-            tickCount += 1;
+      tickCount += 1;
 
-            if (tickCount > ticksPerFrame) {
-
-                tickCount = 0;
-
-                // If the current frame index is in range
-                if (frameIndex < numberOfFrames - 1) {  
-                    // Go to the next frame
-                    frameIndex += 1;
-                } else {
-                    frameIndex = 0;
-                }
-            }
-        };
+      if (tickCount > ticksPerFrame) {
+        tickCount = 0;
+        if (frameIndex < numberOfFrames - 1) {  
+          // Go to the next frame
+          frameIndex += 1;
+        } else {
+          frameIndex = 0;
+        }
+      }
+    };
     
     that.render = function () {
     
-      // Clear the canvas
-      that.context.clearRect(0, 0, that.width, that.height);
-      
-      // Draw the Ali Body
-      that.context.drawImage(
-        that.image,
-        frameIndex * lipsMgr.headWidth, // position on source canvas
-        lipsMgr.expressions * lipsMgr.headHeight,      // 175 * expression
-        lipsMgr.headWidth,  // that.width / numberOfFrames,
-        lipsMgr.headHeight, // that.height,
-        window.globalAppSettings.aliHead_x,   // position to draw on canvas
-        window.globalAppSettings.aliHead_y,
-        lipsMgr.headWidth,
-        lipsMgr.headHeight
-      );
+      if( options.spriteType === window.lipsyncEnum.spriteType.STATIC ) {
+        // Clear the canvas
+        that.context.clearRect(0, 0, window.globalAppSettings.cartoonCanvasWidth, window.globalAppSettings.cartoonCanvasWidth);
 
-      // Draw the animated Ali Head/Mouth
-      that.context.drawImage(
-        that.image,
-        frameIndex * lipsMgr.headWidth, // position on source canvas
-        lipsMgr.expressions * lipsMgr.headHeight,      // 175 * expression
-        lipsMgr.headWidth,  // that.width / numberOfFrames,
-        lipsMgr.headHeight, // that.height,
-        window.globalAppSettings.aliHead_x,   // position to draw on canvas
-        window.globalAppSettings.aliHead_y,
-        lipsMgr.headWidth,
-        lipsMgr.headHeight
-      );
+
+        // Draw the Ali Body
+console.log("BODY EVENT! " + options.spriteType);
+        that.context.drawImage(
+          that.image,
+          0, // position on source canvas
+          0,
+          window.globalAppSettings.aliBody_width,
+          window.globalAppSettings.aliBody_height,
+          window.globalAppSettings.aliBody_x,   // position to draw on canvas
+          window.globalAppSettings.aliBody_y,
+          window.globalAppSettings.aliBody_width,
+          window.globalAppSettings.aliBody_height
+        );
+      } else if( options.spriteType === lipsyncEnum.spriteType.LIPSYNCED ) {
+console.log("LIPS EVENT! " + options.spriteType);
+        // Draw the animated Ali Head/Mouth
+        that.context.drawImage(
+          that.image,
+          frameIndex * lipsMgr.headWidth, // position on source canvas
+          lipsMgr.expressions * lipsMgr.headHeight,      // 175 * expression
+          lipsMgr.headWidth,  // that.width / numberOfFrames,
+          lipsMgr.headHeight, // that.height,
+          window.globalAppSettings.aliHead_x,   // position to draw on canvas
+          window.globalAppSettings.aliHead_y,
+          lipsMgr.headWidth,
+          lipsMgr.headHeight
+        );
+      }
     };
-    
+
     return that;
-  }
+  };
   
   // Get entire canvas
   canvas = document.getElementById("cartoonCanvas");
   canvas.width = 1000;
   canvas.height = 750;
   
-  // Create sprite sheet
-  headImage = new Image();
+  // Create Image
   bodyImage = new Image();
-  
+
+  // Load sprite sheet
+  bodyImage.src = "images/ali_body.png";
+
+  // Create Body Sprite
+  bodySprite = sprite({
+    spriteType: window.lipsyncEnum.spriteType.STATIC,
+    context: canvas.getContext("2d"),
+    width: 1400,
+    height: 700,
+    image: bodyImage,
+    numberOfFrames: 1,
+    ticksPerFrame: 0
+  });
+
+
+  // Create Image
+  headImage = new Image();
+
+  // Load sprite sheet
+  headImage.addEventListener("load", gameLoop);
+  headImage.src = "images/ali_front_faces.png";
+
   // Create sprite
   headSprite = sprite({
+    spriteType: window.lipsyncEnum.spriteType.LIPSYNCED,
     context: canvas.getContext("2d"),
     width: 1400,
     height: 700,
@@ -219,10 +245,8 @@ var lipsMgr = new LipSyncManager( {
     numberOfFrames: lipsMgr.phonemes,
     ticksPerFrame: 4
   });
-  
-  // Load sprite sheet
-  headImage.addEventListener("load", gameLoop);
-  headImage.src = "images/ali_front_faces.png";
+
+
 
 } ());
 
