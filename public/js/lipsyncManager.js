@@ -1,6 +1,7 @@
 var LipSyncManager = function( initObj ) { 
   this.currentHeadId = 0;
   this.currentHeadIndex = 0;
+  this.lipsyncDataLength = 0;
 
   if (!this.initObj) { this.initObj={}; }
 
@@ -49,6 +50,7 @@ var LipSyncManager = function( initObj ) {
     this.lipsyncData = this.getDefaults()['lipsyncData']; 
     console.log("LipSyncManager ERROR:  No LipsyncData specified.  Using default.");
   }
+  this.lipsyncDataLength = this.lipsyncData.length;
 
   if (initObj.hasOwnProperty('headId')) { this.headId = initObj.headId;  } 
   else { 
@@ -135,35 +137,29 @@ LipSyncManager.prototype.play = function() {
   console.log("LipSyncManager::play!");
 
   // Start Audio
+  // this.audioPlayerElement.playbackRate = 0.5; // !!!!!
   this.audioPlayerElement.play(); // Play the HTML element
 
   // Start Head Animation
   this.currentHeadIndex = 0;
   this.currentHeadId = 0;
-console.log("CHKPT1: " + this.currentHeadIndex);
   this.startTimerTick();
 };
 
 //// 
 
 LipSyncManager.prototype.startTimerTick = function () {
-  console.log("startTimerTick!");
-console.log("CHKPT2: " + this.currentHeadIndex);
-
   if ( window.lipsyncManagerTimeout ) { clearTimeout( window.lipsyncManagerTimeout ); }
 
   var scope = this;
-  window.lipsyncManagerTimeout = setTimeout( scope.updateTimedHeadIndex.bind(scope) , 1000); // !!!!!  / this.fps ); 
+  window.lipsyncManagerTimeout = setTimeout( scope.updateTimedHeadIndex.bind(scope) , 1000 / this.fps ); 
 
-console.log("startTimerTick!  -- SetTimeout!");
 };
 
 
 LipSyncManager.prototype.updateTimedHeadIndex = function() {
-console.log("updateTimedHeadIndex ARRIVAL!  this.currentHeadIndex = " + this.currentHeadIndex);
   this.currentHeadIndex = this.currentHeadIndex + 1;
-  console.log("updateTimedHeadIndex! " + this.currentHeadIndex);
-  if( this.currentHeadIndex < 12 ) { // lipsyncDataLen
+  if( this.currentHeadIndex < this.lipsyncDataLength ) {
     this.startTimerTick(); // Do another tick...
     return;
   }
@@ -172,10 +168,21 @@ console.log("updateTimedHeadIndex ARRIVAL!  this.currentHeadIndex = " + this.cur
 //// 
 
 LipSyncManager.prototype.getCurrentHeadId = function () {
-console.log("LIP SYNC INDEX: " + this.currentHeadIndex);
-// console.log("this.lipsyncData[x][e] = " + this.lipsyncData[this.currentHeadIndex][this.expressions] );
+  if ( this.currentHeadIndex >= this.lipsyncDataLength ) { return this.lipsyncData[0][0]; } // Guard
 
-  return this.lipsyncData[this.currentHeadIndex][this.expressions];
+  console.log("LIP SYNC INDEX: " + (this.currentHeadIndex + 80) + " --> " + this.lipsyncData[this.currentHeadIndex][0] );
+
+  // console.log("[" + this.lipsyncData[this.currentHeadIndex][0] + "," + this.lipsyncData[this.currentHeadIndex][1] + "]" );
+
+  return this.lipsyncData[this.currentHeadIndex][0];
 }
+
+LipSyncManager.prototype.getCurrentExpressionId = function () {
+  if ( this.currentHeadIndex >= this.lipsyncDataLength ) { return this.lipsyncData[0][1]; } // Guard
+
+  return this.lipsyncData[this.currentHeadIndex][1];
+}
+
+
 
 
