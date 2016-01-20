@@ -3,6 +3,9 @@ var LipSyncManager = function( initObj ) {
   this.currentHeadIndex = 0;
   this.lipsyncDataLength = 0;
 
+  this.isAudioLoaded = false;
+  this.isPlaying = false;
+
   if (!this.initObj) { this.initObj={}; }
 
   if (initObj.hasOwnProperty('canvasId')) { this.canvasId = initObj.canvasId;  } 
@@ -72,17 +75,14 @@ var LipSyncManager = function( initObj ) {
   console.log("LipSyncManager::headHeight = " + Number(this.headHeight) );
   console.log("LipSyncManager::expressions = " + Number(this.expressions) );
   console.log("LipSyncManager::audioPlayerId = " + this.audioPlayerId );
-
   console.log("LipSyncManager::soundFile = " + this.soundFile );
   console.log("LipSyncManager::lipsyncData = " + this.lipsyncData );
   console.log("LipSyncManager::headId = " + this.headId );
 
-  // !!!!! remove - var spriteManager = new SpriteManager();
 
+  // Start
   this.loadAudio(this.soundFile);
-  // this.audioPlayerElement.play();
 
-  // this.onReady(); //  -- Call this after LIPS and .MP3 have loaded.
 };
 
 LipSyncManager.prototype.getDefaults = function() {
@@ -99,11 +99,10 @@ LipSyncManager.prototype.getDefaults = function() {
     expressions: 0,
     audioPlayerId: 'audioPlayerId',
     soundFile: 'audio/defaultAudio.mp3',
-    lipsyncData:  [ [1,0] ],
+    lipsyncData:  [ [0,0],[1,0],[2,0],[3,0],[4,0],[5,0],[6,0],[6,0],  [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[6,1],  [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[6,2] ],
     headId: 'headId',
     onReady: function( cb ) {
       console.log("Default onReady callback!  Will play ASAP.");
-      this.play( this.headIdStr );
     }
   }
 }
@@ -113,43 +112,62 @@ LipSyncManager.prototype.loadAudio = function( anMP3AudioURL ) {
   var anOGGAudioURL = anMP3AudioURL.replace(".mp3", ".ogg"); // Extract .ogg filename
 
   document.getElementById('mp3Source').src = anMP3AudioURL;
-  // document.getElementById('oggSource').src = anOGGAudioURL;
+  document.getElementById('oggSource').src = anOGGAudioURL;
 
+  var scope = this;
+  this.audioPlayerElement.addEventListener('canplaythrough', function() { 
+    scope.isAudioLoaded = true;
+    console.log("CanPlayThru done!  this.isAudioLoaded = " + scope.isAudioLoaded);
+  });
   this.audioPlayerElement.load();
-  this.play()
+
   return true;
 };
 
-LipSyncManager.prototype.setSpriteSheetFilename = function( spriteSheetFilename ) { 
-  this.setSpriteSheetFilename = spriteSheetFilename;
-
-}
-
-LipSyncManager.prototype.setFrame = function( frameNum, expressionNum ) { 
-  console.log("setFrame arrival!!!!!");
-  // this.headElement.style["transform"] = "rotate(70deg)";
-  // this.headElement.
-
-}
-
 LipSyncManager.prototype.play = function() { 
-  // One headId per soundfile.  We handle only a single headId for now.
-  console.log("LipSyncManager::play!");
+  // Toggles PLAY and STOP 
 
-  // Start Audio
-  // this.audioPlayerElement.playbackRate = 0.5; // !!!!!
-  this.audioPlayerElement.play(); // Play the HTML element
+  if (!this.isAudioLoaded) { return; }
+
+  if (this.isPlaying) {
+
+    // Now, STOP Playing / Reset
+    this.stop();
+
+  } else {
+
+    // START PLAYING AUDIO
+
+    this.audioPlayerElement.play(); // Play the HTML element
+    this.isPlaying = true;
+
+    // Start Head Animation
+    this.currentHeadIndex = 0;
+    this.currentHeadId = 0;
+    this.startTimerTick();
+
+  }
+
+};
+
+LipSyncManager.prototype.stop = function() {
+  if (!this.isAudioLoaded) { return; }
+
+  clearTimeout( window.lipsyncManagerTimeout );
+
+  this.audioPlayerElement.pause();
+  this.audioPlayerElement.currentTime = 0;
+  this.isPlaying = false;
 
   // Start Head Animation
   this.currentHeadIndex = 0;
   this.currentHeadId = 0;
-  this.startTimerTick();
-};
+}
 
 //// 
 
 LipSyncManager.prototype.startTimerTick = function () {
-  if ( window.lipsyncManagerTimeout ) { clearTimeout( window.lipsyncManagerTimeout ); }
+  clearTimeout( window.lipsyncManagerTimeout );
 
   var scope = this;
   window.lipsyncManagerTimeout = setTimeout( scope.updateTimedHeadIndex.bind(scope) , 1000 / this.fps ); 
@@ -159,20 +177,17 @@ LipSyncManager.prototype.startTimerTick = function () {
 
 LipSyncManager.prototype.updateTimedHeadIndex = function() {
   this.currentHeadIndex = this.currentHeadIndex + 1;
-  if( this.currentHeadIndex < this.lipsyncDataLength ) {
-    this.startTimerTick(); // Do another tick...
+  if( this.currentHeadIndex >= this.lipsyncDataLength ) {
+    this.stop();
     return;
   }
+  this.startTimerTick(); // Do another tick...
 }
 
 //// 
 
 LipSyncManager.prototype.getCurrentHeadId = function () {
   if ( this.currentHeadIndex >= this.lipsyncDataLength ) { return this.lipsyncData[0][0]; } // Guard
-
-  console.log("LIP SYNC INDEX: " + (this.currentHeadIndex + 80) + " --> " + this.lipsyncData[this.currentHeadIndex][0] );
-
-  // console.log("[" + this.lipsyncData[this.currentHeadIndex][0] + "," + this.lipsyncData[this.currentHeadIndex][1] + "]" );
 
   return this.lipsyncData[this.currentHeadIndex][0];
 }

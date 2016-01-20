@@ -4,6 +4,9 @@
 <title>Anim Practice</title>
 
 <style>
+body {
+  width: 1000px;
+}
 .canvas {
   background: rgba(0, 0, 0, 0.2) url("images/blur_riverbg.jpg") top left no-repeat;
   position: relative;
@@ -14,14 +17,22 @@
   position: absolute;
   width: 200px;
   height: 175px;
-  // background-color: #f00;
   top: 25px;
   left: 25px;
   color: #fff;
   overflow: hidden;
 }
 h1 {
-  font: 1.5em calibri, arial;
+  font: 1.8em Calibri, arial;
+  width: 33%;
+  display: inline;
+}
+button {
+  width: 33%;
+  height: 1.5em;
+  font-size: 3em;
+  border-radius: 0;
+  float: right;
 }
 .copyright {
   position: absolute;
@@ -34,14 +45,18 @@ h1 {
 </head>
 <body>
 <canvas id="cartoonCanvas" class="canvas"></canvas>
-<h1>Smiley the Alligator - Lipsync Demo</h1>
+<h1>Alligator - JS Lipsync Demo</h1>
 <div class="copyright">Images © 2005-2016 Cartoon Solutions</div>
+<button id="playButton">PLAY</button>
+
 <audio id='audioPlayerId' preload="none">
   <source id="mp3Source" type="audio/mpeg" src="audio/ali_intro.mp3">
-  <!-- source id="oggSource" src=".ogg" type="audio/ogg" -->
-  Your browser does not support the audio element.  Please update your browser.
+  <source id="oggSource" type="audio/ogg"  src="audio/ali_intro.ogg">
+  Your browser does not support the Audio element.  Please update your browser.
 </audio>
 
+
+<script src="js/externalLipsyncData.js"></script>
 <script src="js/lipsyncManager.js"></script>
 <script>
 
@@ -76,200 +91,18 @@ var lipsMgr = new LipSyncManager( {
   expressions: 0,
   audioPlayerId: 'audioPlayerId',
   soundFile: 'audio/ali_intro.mp3',
-  lipsyncData:  [ 
-
-
-
-
-[0,0],
-[1,1],  // Hi you guys!
-[2,1],
-[3,1],
-[4,1],
-[1,1],
-[2,1],
-[2,1],
-[3,1],
-[3,1],
-[3,1],
-[3,1],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[2,0],   // If anybody knows about teeth..
-[3,0],
-[3,0],
-[1,0],
-[3,0],
-[6,0],
-[1,0],
-[2,0],
-[3,0],
-[4,0],
-[4,0],
-[3,0],
-[3,0],
-[0,0],
-[1,0],
-[2,0],
-[2,0],
-[1,0],
-[1,0],
-[6,0],
-[6,0],
-[6,0],
-[6,0],
-[0,0],
-[2,0],  // .. its me.
-[6,0],
-[6,0],
-[3,0],
-[3,0],
-[3,0],
-[3,0],
-[3,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[2,0], // I
-[2,0],
-[3,0],
-[1,0],
-[1,0],
-[4,0],
-[2,0],
-[3,0], // always try to 
-[0,0],
-[2,0],
-[3,0],
-[4,0],
-[6,0],
-[2,0],
-[2,0],
-[6,0],
-[2,0],
-[3,0], // BRUSHED
-[4,0],
-[1,0],
-[1,0],
-[1,0],
-[3,0],
-[3,0],
-[0,0],
-[1,0], // and 
-[0,0],
-[0,0],
-[0,0],
-[6,0], // FLOSSED
-[3,0],
-[1,0],
-[1,0],
-[1,0],
-[2,0],
-[3,0],
-[3,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[4,0], // ...so my breath
-[4,0],
-[6,0],
-[2,0],
-[1,0],
-[3,0],
-[0,0],
-[2,0],
-[1,0],
-[1,0],
-[5,0],
-[0,0],
-[4,3], // ...is always fresh
-[3,0],
-[3,0],
-[3,0],
-[2,0],
-[2,0],
-[6,0],
-[1,0],
-[1,0],
-[3,0],
-[2,0],
-[0,0],
-[6,0], // minty.
-[2,0],
-[2,0],
-[3,0],
-[3,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[1,1],  // Ahhhhhh...
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[1,1],
-[0,0],
-[0,0], 
-[0,0], 
-[0,0],
-[0,0], 
-[0,0], 
-
-[4,3],  // Blink 1
-[4,3],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,1],
-[0,1],
-[0,0],
-[0,1],
-[0,1],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[0,0],
-[4,3],
-[4,3],
-[4,3],
-[4,3],
-[4,3],
-[4,3]
-],
-  headId: 'aliHead-01',
-  onReady: onReadyBeginPlayback
+  lipsyncData:  externalLipsyncData,
+  headId: 'aliHead-01'
 } );
 
+
+// Control Buttons
+document.querySelector('#playButton').addEventListener('click', function() {
+  lipsMgr.play();
+});
+
+
+/////////////////
 
 
 //////
@@ -443,20 +276,6 @@ var lipsMgr = new LipSyncManager( {
 
 
 } ());
-
-///////
-
-
-var onReadyBeginPlayback = function() {
-  console.log( "Custom onReadyBeginPlayback!!!!" );
-  this.play("#audioPlayerId");
-};
-
-
-
-
-
-
 
 
 </script>
