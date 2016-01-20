@@ -99,7 +99,7 @@ LipSyncManager.prototype.getDefaults = function() {
     expressions: 0,
     audioPlayerId: 'audioPlayerId',
     soundFile: 'audio/defaultAudio.mp3',
-    lipsyncData:  [ [0,2], [1,2], [2,2], [3,2], [4,2], [5,2], [6,2], [0,0], [1,0], [2,0], [3,0], [4,0], [5,0], [6,0] ],
+    lipsyncData:  [ [1,0] ],
     headId: 'headId',
     onReady: function( cb ) {
       console.log("Default onReady callback!  Will play ASAP.");
