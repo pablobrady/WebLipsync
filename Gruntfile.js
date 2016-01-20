@@ -21,8 +21,11 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src:  'src/js/<%= pkg.name %>.js',
-        dest: 'src/js-uglify/<%= pkg.name %>.min.js'
+        files: {
+          // Output.js: Input.js
+          'src/js-uglify/externalLipsyncData.min.js':  'src/js/externalLipsyncData.js', 
+          'src/js-uglify/lipsyncManager.min.js':  'src/js/lipsyncManager.js', 
+        }
       }
     },
 
@@ -38,7 +41,7 @@ module.exports = function(grunt) {
         separator: ';',
       },
       dist: {
-        src: ['src/js-uglify/<%= pkg.name %>.min.js'],
+        src: ['src/js-uglify/externalLipsyncData.min.js', 'src/js-uglify/lipsyncManager.min.js'],
         dest: 'public/js/<%= pkg.name %>_all.min.js',
       },
     },
@@ -95,6 +98,7 @@ http-server public/
   grunt.loadNpmTasks('grunt-concurrent');
 
   grunt.registerTask('start',['nodemon']);
+  grunt.registerTask('default',['jshint','uglify', 'concat']);
   // grunt.registerTask('default',['jshint','uglify','concat','htmlmin','sass']);
   // grunt.registerTask('dev',['jshint','concurrent']);
   // grunt.task.run('dev',['jshint','concat','copy','watch']);

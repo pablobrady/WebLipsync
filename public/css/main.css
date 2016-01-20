@@ -1,12 +1,12 @@
 body {
-  width: 1000px;
-}
+  width: 1000px; }
+
 .canvas {
   background: rgba(0, 0, 0, 0.2) url("../images/blur_riverbg.jpg") top left no-repeat;
   position: relative;
   width: 1000px;
-  height: 750px;
-}
+  height: 750px; }
+
 .aliHead {
   position: absolute;
   width: 200px;
@@ -14,25 +14,32 @@ body {
   top: 25px;
   left: 25px;
   color: #fff;
-  overflow: hidden;
-}
+  overflow: hidden; }
+
 h1 {
-  font: 1.8em Calibri, arial;
+  font: italic normal 2.0em Calibri, Helvetica, sans-serif; }
+
+.pageDesc {
   width: 33%;
   padding: 0 0 0 5px;
-  display: inline;
-}
+  float: left; }
+  .pageDesc SPAN {
+    width: 100%;
+    font: italic small-caps normal 1.5em Arial, Helvetica, sans-serif;
+    padding: 0 0 0 5px; }
+
 button {
   width: 25%;
   height: 1.5em;
   font-size: 3em;
   border-radius: 0;
   margin: 0 0 0 5px;
-  float: right;
-}
+  float: right; }
+
 .copyright {
   position: absolute;
   bottom: 0;
   padding: 0 0 5px 5px;
-  color: #888;
-}
+  color: #888; }
+
+/*# sourceMappingURL=main.css.map */

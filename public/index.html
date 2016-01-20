@@ -10,13 +10,41 @@
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 
+
+<!-- for Google -->
+<meta name="description" content="Can pure Javascript handle relatively good quality lipsync (without Flash)?  This test is just a proof of concept." />
+<meta name="keywords" content="lip-sync lipsync character children's game javascript animation flash" />
+
+<meta name="author" content="Paul Brady" />
+<meta name="copyright" content="Copyright 2016 Paul Brady; Images Copyright 2005-2016 Cartoon Solutions" />
+<meta name="application-name" content="Ali Lipsync Demo - Proof of Concept" />
+
+<!-- for Facebook -->          
+<meta property="og:title" content="Ali Lipsync - Proof of Concept" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="images/weblipsync.jpg" />
+<meta property="og:url" content="http://weblipsync.herokuapp.com/" />
+<meta property="og:description" content="Can pure Javascript handle relatively good quality lipsync (without Flash)?  This is just a test." />
+
+<!-- for Twitter -->          
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Ali Lipsync - Proof of Concept" />
+<meta name="twitter:description" content="Can pure Javascript handle relatively good quality lipsync (without Flash)?  This is just a test." />
+<meta name="twitter:image" content="images/weblipsync.jpg" />
+
+
+
 <link rel="stylesheet" href="css/reset.css">
 <link rel="stylesheet" href="css/main.css">
 
 </head>
 <body>
 <canvas id="cartoonCanvas" class="canvas"></canvas>
-<h1>Alligator Lipsync Demo</h1>
+<div class="pageDesc">
+  <h1>Ali Lipsync Test</h1>
+  <span>A demo written in pure JavaScript,<br>
+  by <a target="_pbrady" href="http://www.pbrady.net">Paul Brady</a>.</span>
+</div>
 <div class="copyright">Images © 2005-2016 Cartoon Solutions</div>
 <button id="playButton">PLAY</button>
 <button id="stopButton">STOP</button>
@@ -28,8 +56,7 @@
 </audio>
 
 
-<script src="js/externalLipsyncData.js"></script>
-<script src="js/lipsyncManager.js"></script>
+<script src="js/WebLipsync_all.min.js"></script>
 <script>
 
 window.lipsyncSpeed = 1.0; // 1.0 is full speed

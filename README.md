@@ -38,6 +38,6 @@ Run ```grunt start:dev``` or ```grunt start:dist``` from the command line (or ev
 
 
 ## Visit the Live Site
-Available [here](http://www.pbrady.net/lipsync)!  <br><br>
+Available [here](http://weblipsync.herokuapp.com/)!  <br><br>
 Thanks!<br>
 ~P
