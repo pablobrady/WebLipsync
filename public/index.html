@@ -1,53 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Anim Practice</title>
+><meta charset="utf-8">
+<title>Alligator Lipsync Demo</title>
 
-<style>
-body {
-  width: 1000px;
-}
-.canvas {
-  background: rgba(0, 0, 0, 0.2) url("images/blur_riverbg.jpg") top left no-repeat;
-  position: relative;
-  width: 1000px;
-  height: 750px;
-}
-.aliHead {
-  position: absolute;
-  width: 200px;
-  height: 175px;
-  top: 25px;
-  left: 25px;
-  color: #fff;
-  overflow: hidden;
-}
-h1 {
-  font: 1.8em Calibri, arial;
-  width: 33%;
-  display: inline;
-}
-button {
-  width: 33%;
-  height: 1.5em;
-  font-size: 3em;
-  border-radius: 0;
-  float: right;
-}
-.copyright {
-  position: absolute;
-  bottom: 0;
-  padding: 0 0 5px 5px;
-  color: #888;
-}
-</style>
+<meta name="copyright" content="Copyright 2016 Paul Brady; Images Copyright 2005-2016 Cartoon Solutions" />
+<mete name="description" content="This is a pure JavaScript lipsync animation.  It is meant only as a proof of concept.  The alligator's voice was also recorded/edited by Paul.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/main.css">
 
 </head>
 <body>
 <canvas id="cartoonCanvas" class="canvas"></canvas>
-<h1>Alligator - JS Lipsync Demo</h1>
+<h1>Alligator Lipsync Demo</h1>
 <div class="copyright">Images © 2005-2016 Cartoon Solutions</div>
 <button id="playButton">PLAY</button>
+<button id="stopButton">STOP</button>
 
 <audio id='audioPlayerId' preload="none">
   <source id="mp3Source" type="audio/mpeg" src="audio/ali_intro.mp3">
@@ -97,6 +69,9 @@ var lipsMgr = new LipSyncManager( {
 
 
 // Control Buttons
+document.querySelector('#stopButton').addEventListener('click', function() {
+  lipsMgr.stop();
+});
 document.querySelector('#playButton').addEventListener('click', function() {
   lipsMgr.play();
 });
