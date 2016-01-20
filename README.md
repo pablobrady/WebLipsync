@@ -16,13 +16,13 @@
 Running ```grunt``` from the command line, will...
 
 1. jsLint the app.js
-2. Uglify the app.js into app.min.js (referenced in index.html)
-3. Start watching the Sass (.scss) file for changes.
+2. Uglify the app.js into separate *.min.js files
+3. Concat the *.min.js files into a single WebLipsync_all.min.js (referenced by index.html)
 4. Compile the .scss, then exit.
 
 
-Be sure the only CSS you edit is in the "/Sass/main.scss" file.  
-These compiled changes will overwrite the contents of "/public/css/main.css".
+Be sure the only CSS you edit is in the "/Sass/main.scss", or other "/src" files.  
+These compiled changes will overwrite the contents of "/public/css/main.css", etc.
 
 
 Or, running ```grunt dev``` from the command line, will...

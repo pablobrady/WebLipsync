@@ -101,6 +101,6 @@ http-server public/
   grunt.registerTask('serve',['nodemon']);
 
   grunt.registerTask('default',['jshint','uglify', 'concat', 'htmlmin', 'sass']);
-  grunt.registerTask('dev',['jshint','concurrent']);
+  grunt.registerTask('dev',['jshint','uglify', 'concat', 'htmlmin', 'concurrent']);
   // grunt.task.run('dev',['jshint','concat','copy','watch']);
 };
