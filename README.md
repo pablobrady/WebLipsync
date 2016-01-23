@@ -1,5 +1,5 @@
 # WebLibsync
-
+Ali Lipsync Demo
 <br><br>
 
 ## Getting Started
@@ -33,7 +33,7 @@ Or, running ```grunt dev``` from the command line, will...
 <br><br>
 
 ## Launch only the local server
-Run ```grunt start:dev``` or ```grunt start:dist``` from the command line (or even ```npm start```).
+Run ```grunt dev``` or ```grunt serve``` from the command line (or even ```npm start```).
 <br><br>
 
 

@@ -25,6 +25,7 @@ module.exports = function(grunt) {
           // Output.js: Input.js
           'src/js-uglify/externalLipsyncData.min.js':  'src/js/externalLipsyncData.js', 
           'src/js-uglify/lipsyncManager.min.js':  'src/js/lipsyncManager.js', 
+          'src/js-uglify/index.min.js':  'src/js/index.js', 
         }
       }
     },
@@ -41,7 +42,7 @@ module.exports = function(grunt) {
         separator: ';',
       },
       dist: {
-        src: ['src/js-uglify/externalLipsyncData.min.js', 'src/js-uglify/lipsyncManager.min.js'],
+        src: ['src/js-uglify/externalLipsyncData.min.js', 'src/js-uglify/lipsyncManager.min.js', 'src/js-uglify/index.min.js'],
         dest: 'public/js/<%= pkg.name %>_all.min.js',
       },
     },
@@ -85,7 +86,7 @@ module.exports = function(grunt) {
   });
 
 /* 
-http-server public/
+ALT SERVER:  "http-server public/"
 */
 
   grunt.loadNpmTasks('grunt-contrib-sass');
