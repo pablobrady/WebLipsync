@@ -38,6 +38,8 @@ Run ```grunt dev``` or ```grunt serve``` from the command line (or even ```npm s
 
 
 ## Visit the Live Site
-Available [here](http://weblipsync.herokuapp.com/)!  <br><br>
+Available [http://weblipsync.herokuapp.com/](http://weblipsync.herokuapp.com/)!  <br><br>
 Thanks!<br>
-~P
+~P  
+
+P.S.  The images "ali_body.png" and "ali_lips.png" are copyrighted, but available for purchase by the good folks at [http://www.cartoonsolutions.com/](Cartoon Solutions).  Please support them!
